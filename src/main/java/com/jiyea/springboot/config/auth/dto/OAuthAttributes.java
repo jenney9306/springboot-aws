@@ -16,8 +16,7 @@ public class OAuthAttributes {
     private String picture;
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey,
-                            String name, String email, String picture){
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
@@ -25,28 +24,87 @@ public class OAuthAttributes {
         this.picture = picture;
     }
 
-    public static OAuthAttributes of(String registrationId, String userNameAttributeName,
-                                     Map<String, Object> attributes) {
+    public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+
         return ofGoogle(userNameAttributeName, attributes);
     }
 
-    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes){
-        return OAuthAttributes.builder()
-                .name((String) attributes.get("name"))
-                .email((String) attributes.get("email"))
-                .picture((String) attributes.get("picture"))
-                .attributes(attributes)
-                .nameAttributeKey(userNameAttributeName)
-                .build();
+    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
+        return new OAuthAttributes(
+                attributes,
+                userNameAttributeName,
+                (String) attributes.get("name"),
+                (String) attributes.get("email"),
+                (String) attributes.get("picture")
+                );
+//        return OAuthAttributes.builder()
+//                .name((String) attributes.get("name"))
+//                .email((String) attributes.get("email"))
+//                .picture((String) attributes.get("picture"))
+//                .attributes(attributes)
+//                .nameAttributeKey(userNameAttributeName)
+//                .build();
     }
 
     public User toEntity() {
-        return User.builder()
-                .name(name)
-                .email(email)
-                .picture(picture)
-                .role(Role.GEUST)
-                .build();
+        return new User(name, email, picture, Role.GUEST);
+//        return User.builder()
+//                .name(name)
+//                .email(email)
+//                .picture(picture)
+//                .role(Role.GUEST)
+//                .build();
     }
-
 }
+//package com.jiyea.springboot.config.auth.dto;
+//
+//import com.jiyea.springboot.domain.user.Role;
+//import com.jiyea.springboot.domain.user.User;
+//import lombok.Builder;
+//import lombok.Getter;
+//
+//import java.util.Map;
+//
+//@Getter
+//public class OAuthAttributes {
+//    private Map<String, Object> attributes;
+//    private String nameAttributeKey;
+//    private String name;
+//    private String email;
+//    private String picture;
+//
+//    @Builder
+//    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey,
+//                            String name, String email, String picture){
+//        this.attributes = attributes;
+//        this.nameAttributeKey = nameAttributeKey;
+//        this.name = name;
+//        this.email = email;
+//        this.picture = picture;
+//    }
+//
+//    public static OAuthAttributes of(String registrationId, String userNameAttributeName,
+//                                     Map<String, Object> attributes) {
+//        return ofGoogle(userNameAttributeName, attributes);
+//    }
+//
+//    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes){
+//        return OAuthAttributes.builder()
+//                .name((String) attributes.get("name"))
+//                .email((String) attributes.get("email"))
+//                .picture((String) attributes.get("picture"))
+//                .attributes(attributes)
+//                .nameAttributeKey(userNameAttributeName)
+//                .build();
+//    }
+//
+//    public User toEntity() {
+//        return User.builder()
+//                .name(name)
+//                .email(email)
+//                .picture(picture)
+//                .role(Role.GUEST)
+//                .build();
+//    }
+//
+//}
